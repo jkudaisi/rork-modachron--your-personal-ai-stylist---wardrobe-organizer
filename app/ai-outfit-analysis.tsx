@@ -69,39 +69,9 @@ export default function AIOutfitAnalysisScreen() {
     setBackgroundRemovalError(null);
     
     try {
-      // In a real app, this would call a background removal API like Remove.bg
-      // For demo purposes, we'll simulate the API call
       const decodedUri = decodeURIComponent(photoUri as string);
-      
-      // Simulate API call to remove background
-      const response = await fetch('https://api.remove.bg/v1.0/removebg', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-Api-Key': 'YOUR_API_KEY_HERE' // In a real app, use environment variables
-        },
-        body: JSON.stringify({
-          image_url: decodedUri,
-          size: 'auto',
-          format: 'png',
-          type: 'person'
-        })
-      }).catch(err => {
-        // This will fail in our demo since we don't have a real API key
-        // In a real app, this would return the processed image URL
-        console.log('API call failed as expected in demo:', err);
-        throw new Error('Background removal API call failed');
-      });
-      
-      // Since our API call will fail in the demo, we'll simulate success for demonstration
-      // In a real app, you would use the actual response from the API
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing time
-      
-      // For demo purposes, we'll just return the original image
-      // In a real app, this would be the URL of the processed image
-      setProcessedImage(decodedUri);
-      
+      const processedUri = await removeBackground(decodedUri);
+      setProcessedImage(processedUri);
     } catch (error) {
       console.error('Error removing background:', error);
       setBackgroundRemovalError('Failed to remove background. The background removal service is currently unavailable.');
